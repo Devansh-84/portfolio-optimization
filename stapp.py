@@ -143,8 +143,28 @@ def main():
         st.write(f"{idx}. {symbol}")
 
     # User selects stocks by entering numbers corresponding to symbols
-    selected_indexes = st.text_input("Enter the numbers corresponding to the stocks you want to include in your portfolio (comma-separated)").split(",")
-    selected_indexes = [int(index.strip()) - 1 for index in selected_indexes]  # Adjust for 0-indexing
+    # Original code:
+# selected_indexes = input("Enter the numbers corresponding to the stocks you want to include in your portfolio (comma-separated): ").split(",")
+# selected_indexes = [int(index.strip()) - 1 for index in selected_indexes]  # Adjust for 0-indexing
+
+# Updated code with input validation:
+selected_indexes_input = input("Enter the numbers corresponding to the stocks you want to include in your portfolio (comma-separated): ")
+
+# Split the input and remove any extra spaces or empty values
+selected_indexes = [index.strip() for index in selected_indexes_input.split(',') if index.strip()]
+
+# Check if there are any valid values, and if so, convert them to integers
+try:
+    selected_indexes = [int(index) - 1 for index in selected_indexes]  # Adjust for 0-indexing
+except ValueError:
+    print("Invalid input detected. Please enter valid numbers corresponding to stock indexes.")
+    # You may want to handle this by either stopping or asking for input again
+    selected_indexes = []
+
+# Make sure there is a valid selection before proceeding
+if not selected_indexes:
+    print("No valid stock indexes selected. Exiting the app.")
+    exit()
 
     # Get the selected stock symbols
     selected_stocks = [available_stock_symbols[i] for i in selected_indexes]
